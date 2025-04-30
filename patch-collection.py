@@ -42,6 +42,8 @@ def get_class_name(line):
 
 def get_def_name(line):
     m = re.search('(\\s*)def ([0-9a-z_]+)', line, re.IGNORECASE)
+    if m is None:
+        return None, None
     is_class_fn = len(m.group(1)) > 3
     name = m.group(2)
     return name, is_class_fn
@@ -79,7 +81,7 @@ def main():
                 #print(name, class_name, base_class_name, line)
                 if 'def ' in line:
                     name, is_class_fn = get_def_name(line)
-                    if not is_class_fn:
+                    if name is not None and not is_class_fn:
                         class_name, base_class_name = None, None
                     if base_class_name == 'ActionBase':
                         if name in FN_NAMES:
